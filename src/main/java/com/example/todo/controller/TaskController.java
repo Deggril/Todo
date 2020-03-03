@@ -1,19 +1,41 @@
 package com.example.todo.controller;
 
 import com.example.todo.Entities.Task;
+import com.example.todo.Entities.User;
 import com.example.todo.exceptions.NotFoundException;
+import dao.UserDao;
 import org.springframework.web.bind.annotation.*;
+import service.UserService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("tasks")
 public class TaskController {
+
+    UserService userService = new UserService();
+    Map<String, User> users;
     private int counter = 4;
 
-    //@Autowired
-   // private TaskService taskService;
+    @GetMapping("{id}?pass")
+    public String Authorization(String name, String password) {
+        User user = userService.findUser(name);
+        if(user.getPassword() == password)
+        {
+            String token = Long.toHexString(Double.doubleToLongBits(Math.random()));
+            users.put(token, user);
+            return token;
+        }
+        else
+        {
+            return null;
+        }
+    }
 
+    private User getUser(String token){
+        return users.get(token);
+    }
     public List<Task> GetTasks() {
         return null;
         //return taskService.list();
@@ -44,8 +66,8 @@ public class TaskController {
     public Task update(@PathVariable int id, @RequestBody Task message) {
        Task messageFromDb = getMessage(id);
 
-        messageFromDb.setText(message.getText());
-        messageFromDb.setDone(message.getDone());
+        messageFromDb.setName(message.getName());
+        messageFromDb.setIs_done(message.getIs_done());
 
         return messageFromDb;
     }

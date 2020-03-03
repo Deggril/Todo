@@ -3,8 +3,6 @@ package service;
 import com.example.todo.Entities.Task;
 import com.example.todo.Entities.User;
 import dao.UserDao;
-import org.hibernate.Session;
-import utils.HibernateSessionFactoryUtil;
 
 import java.util.List;
 
@@ -15,19 +13,19 @@ public class UserService {
     public UserService() {
     }
 
-    public User findUser(String id) {
-        return usersDao.findByName(id);
+    public User findUser(String name) {
+        return usersDao.findByName(name);
     }
 
-    public void saveUser(User user) {
+    public void saveTask(Task user) {
         usersDao.save(user);
     }
 
-    public void deleteUser(User user) {
+    public void deleteTask(Task user) {
         usersDao.delete(user);
     }
 
-    public void updateUser(User user) {
+    public void updateTask(Task user) {
         usersDao.update(user);
     }
 
@@ -36,6 +34,6 @@ public class UserService {
     }
 
     public List findAllTasks() {
-        return HibernateSessionFactoryUtil.getSessionFactory().openSession().createCriteria(Task.class).list();
+        return usersDao.findAllTasks();
     }
 }

@@ -5,47 +5,32 @@ import java.util.List;
 
 @Entity
 public class User {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    @Id
     private String name;
-
     private String password;
-
-
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
-    @JoinColumn(name = "role_id")
     private Role role;
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Task> tasks;
 
-    public List<Task> getTasks() {
-        return tasks;
-    }
 
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
-    }
+    public User() {}
 
-    public User() {
-    }
-
-    public User(String name, String password, Role role) {
+    public User(String name, String password, Role role, List<Task> tasks) {
         this.name = name;
         this.password = password;
         this.role = role;
+        this.tasks = tasks;
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
         return id;
     }
+    public void setId(int id) {this.id = id;}
 
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -53,16 +38,25 @@ public class User {
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }
 
+    @ManyToOne(targetEntity = Role.class,optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id")
     public Role getRole() {
         return role;
     }
-
     public void setRole(Role role) {
         this.role = role;
     }
+
+    @OneToMany(mappedBy = "user",  fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    public List<Task> getTasks() { return tasks;  }
+    public void setTasks(List<Task> tasks) {this.tasks = tasks; }
+
+
+
+
+
 }
